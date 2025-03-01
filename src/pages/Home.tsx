@@ -101,7 +101,7 @@ const Home: React.FC = () => {
                   to="/book"
                   size="lg"
                   variant="primary"
-                  className="!bg-white !text-blue-600 hover:!bg-gray-100 w-full sm:w-auto"
+                  className="dark:!bg-slate-800 bg-slate-100 dark:!text-gray-100 text-slate-900 dark:hover:!bg-slate-700 hover:!bg-slate-200 w-full sm:w-auto"
                 >
                   Book a Ride
                 </Button>
@@ -213,7 +213,7 @@ const Home: React.FC = () => {
                 <Button
                   size="lg"
                   variant="primary"
-                  className="bg-white text-blue-600 hover:bg-gray-100"
+                  className="dark:!bg-slate-800 bg-slate-100 dark:!text-gray-100 text-slate-900 dark:hover:!bg-slate-700 hover:!bg-slate-200 w-full sm:w-auto"
                 >
                   Book a Ride Now
                 </Button>
