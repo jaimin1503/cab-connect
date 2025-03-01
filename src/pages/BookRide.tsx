@@ -104,30 +104,31 @@ const BookRide: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      
-      <main className="flex-grow bg-gray-50 dark:bg-gray-900 py-10">
-        <div className="container mx-auto px-4">
-          {showAlert && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="mb-6"
-            >
-              <Alert 
-                type={alertType}
-                message={alertMessage}
-                onClose={() => setShowAlert(false)}
-              />
-            </motion.div>
-          )}
-          
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-              {bookingComplete ? 'Your Ride Status' : 'Book a Ride'}
-            </h1>
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+      <main className="flex-grow container mx-auto px-4 py-10">
+        {showAlert && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="mb-6 max-w-4xl mx-auto"
+          >
+            <Alert 
+              type={alertType}
+              message={alertMessage}
+              onClose={() => setShowAlert(false)}
+            />
+          </motion.div>
+        )}
+        
+        <div className="max-w-4xl mx-auto">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold text-gray-900 dark:text-white mb-8 text-center"
+          >
+            {bookingComplete ? 'Your Ride Status' : 'Book Your Ride'}
+          </motion.h1>
             
             {bookingComplete && currentRide ? (
               <RideStatus 
@@ -153,10 +154,8 @@ const BookRide: React.FC = () => {
               </div>
             )}
           </div>
-        </div>
+
       </main>
-      
-      <Footer />
     </div>
   );
 };

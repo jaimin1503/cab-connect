@@ -13,7 +13,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,14 +139,30 @@ const Login: React.FC = () => {
                 type="button"
                 variant="outline"
                 fullWidth
-                onClick={() => alert('Login with Google')}
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    setError('');
+                    const success = await loginWithGoogle();
+                    if (success) {
+                      navigate('/');
+                    } else {
+                      setError('Failed to sign in with Google');
+                    }
+                  } catch (err) {
+                    setError('Failed to sign in with Google');
+                    console.error(err);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
               >
                 <img 
                   src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
                   alt="Google" 
                   className="h-5 w-5 mr-2" 
                 />
-                Google
+                {loading ? 'Signing in...' : 'Google'}
               </Button>
               
               <Button

@@ -179,11 +179,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, isLoading = false }
   ];
   
   return (
-    <Card className="w-full max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Book a Ride</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Card className="w-full max-w-2xl mx-auto p-8 shadow-lg dark:shadow-gray-800/20 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
       
-      <div className="mb-8">
-        <div className="flex items-center">
+          <div className="mb-8">
+            <div className="flex items-center justify-center">
           {[1, 2, 3].map((stepNumber) => (
             <React.Fragment key={stepNumber}>
               <div 
@@ -197,7 +206,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, isLoading = false }
               </div>
               {stepNumber < 3 && (
                 <div 
-                  className={`flex-1 h-1 mx-2 ${
+                  className={`flex-1 h-1 mx-4 rounded ${
                     step > stepNumber 
                       ? 'bg-blue-600' 
                       : 'bg-gray-200 dark:bg-gray-700'
@@ -485,7 +494,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, isLoading = false }
           </motion.div>
         )}
       </form>
-    </Card>
+        </motion.div>
+      </Card>
+    </motion.div>
   );
 };
 
