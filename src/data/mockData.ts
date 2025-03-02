@@ -99,7 +99,7 @@ export const mockRides: Ride[] = [
       lng: -122.3964,
     },
     cabType: 'standard',
-    fare: 25.50,
+    fare: 2550,
     distance: 3.2,
     duration: 15,
     status: 'completed',
@@ -124,7 +124,7 @@ export const mockRides: Ride[] = [
       pickupLocation,
       dropLocation,
       cabType,
-      fare: parseFloat(faker.finance.amount(10, 100, 2)),
+      fare: parseFloat(faker.finance.amount(1000, 10000, 2)),
       distance: parseFloat(faker.number.float({ min: 1, max: 20, precision: 0.1 }).toFixed(1)),
       duration: faker.number.int({ min: 5, max: 60 }),
       status,
@@ -161,15 +161,15 @@ export const mockRides: Ride[] = [
 // Calculate fare based on cab type and distance
 export const calculateFare = (cabType: CabType, distance: number): number => {
   const baseRates = {
-    economy: 5,
-    standard: 8,
-    luxury: 12,
+    economy: 500,
+    standard: 800,
+    luxury: 1200,
   };
   
   const perKmRates = {
-    economy: 1.5,
-    standard: 2.5,
-    luxury: 4,
+    economy: 150,
+    standard: 250,
+    luxury: 400,
   };
   
   return baseRates[cabType] + (perKmRates[cabType] * distance);

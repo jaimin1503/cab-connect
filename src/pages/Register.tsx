@@ -6,7 +6,11 @@ import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import Alert from '../components/common/Alert';
 import Select from '../components/common/Select';
-import { useAuth } from '../context/AuthContext';
+import { useAppDispatch } from '../store/hooks';
+import { setUser } from '../store/slices/authSlice';
+import { auth, db } from '../config/firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc, getFirestore } from 'firebase/firestore';
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +24,8 @@ const Register: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   
-  const { register } = useAuth();
+  const dispatch = useAppDispatch();
+  // db is now imported from firebase config
   const navigate = useNavigate();
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -73,16 +78,67 @@ const Register: React.FC = () => {
       setError('');
       setLoading(true);
       
-      const success = await register(formData);
-      
-      if (success) {
-        navigate('/');
-      } else {
-        setError('Failed to create account');
+      // Create user in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const firebaseUser = userCredential.user;
+
+      // Update user profile with name
+      await updateProfile(firebaseUser, {
+        displayName: formData.name
+      });
+
+      // Create user document in Firestore with retry mechanism
+      const userDoc = doc(db, 'users', firebaseUser.uid);
+      let retries = 3;
+      while (retries > 0) {
+        try {
+          await setDoc(userDoc, {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            role: formData.role,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          });
+          break;
+        } catch (e) {
+          retries--;
+          if (retries === 0) throw e;
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
       }
-    } catch (err) {
-      setError('Failed to register. Please try again.');
-      console.error(err);
+
+      // Update Redux state
+      const user = {
+        id: firebaseUser.uid,
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        phone: formData.phone,
+        photoURL: firebaseUser.photoURL || ''
+      };
+
+      dispatch(setUser(user));
+      
+      // Navigate to the appropriate dashboard based on role
+      const dashboardPath = formData.role === 'driver' ? '/driver/dashboard' : '/user/dashboard';
+      navigate(dashboardPath);
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      let errorMessage = 'Failed to create account';
+      
+      // Handle specific Firebase Auth errors
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'This email is already registered. Please use a different email or try logging in.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'The email address is not valid.';
+      } else if (error.code === 'auth/operation-not-allowed') {
+        errorMessage = 'Email/password accounts are not enabled. Please contact support.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'The password is too weak. Please choose a stronger password.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
