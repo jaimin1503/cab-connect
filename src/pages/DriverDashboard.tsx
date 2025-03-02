@@ -15,12 +15,12 @@ import Card from "../components/common/Card";
 import Button from "../components/common/Button";
 import RideRequest from "../components/driver/RideRequest";
 import ActiveRide from "../components/driver/ActiveRide";
-import { useAuth } from "../context/AuthContext";
+import { useAppSelector } from '../store/hooks';
 import { mockRides, mockDrivers } from "../data/mockData";
 import { Ride } from "../types";
 
 const DriverDashboard: React.FC = () => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAppSelector((state) => state.auth);
   const [isAvailable, setIsAvailable] = useState<boolean>(true);
   const [showRideRequest, setShowRideRequest] = useState<boolean>(false);
   const [activeRide, setActiveRide] = useState<Ride | null>(null);

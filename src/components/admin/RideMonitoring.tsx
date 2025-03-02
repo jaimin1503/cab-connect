@@ -149,7 +149,7 @@ const RideMonitoring: React.FC = () => {
                           <span className="font-medium">Driver:</span> {getDriverName(ride.driverId)}
                         </div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-medium">Fare:</span> ${ride.fare.toFixed(2)}
+                          <span className="font-medium">Fare:</span> ₹{ride.fare.toFixed(2)}
                         </div>
                       </div>
                     </div>

@@ -5,7 +5,10 @@ import { Mail, Lock, User, Car } from 'lucide-react';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import Alert from '../components/common/Alert';
-import { useAuth } from '../context/AuthContext';
+import { useAppDispatch } from '../store/hooks';
+import { setUser } from '../store/slices/authSlice';
+import { auth, googleProvider } from '../config/firebase';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -13,7 +16,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   
-  const { login, loginWithGoogle } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,15 +31,25 @@ const Login: React.FC = () => {
       setError('');
       setLoading(true);
       
-      const success = await login(email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
       
-      if (success) {
-        navigate('/');
-      } else {
-        setError('Invalid email or password');
+      const user = {
+        id: firebaseUser.uid,
+        email: firebaseUser.email || '',
+        name: firebaseUser.displayName || '',
+        role: 'user',
+        photoURL: firebaseUser.photoURL || ''
+      };
+      
+      dispatch(setUser(user));
+      navigate('/');
+    } catch (err: any) {
+      let errorMessage = 'Failed to log in';
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        errorMessage = 'Invalid email or password';
       }
-    } catch (err) {
-      setError('Failed to log in. Please try again.');
+      setError(errorMessage);
       console.error(err);
     } finally {
       setLoading(false);
@@ -143,12 +156,19 @@ const Login: React.FC = () => {
                   try {
                     setLoading(true);
                     setError('');
-                    const success = await loginWithGoogle();
-                    if (success) {
-                      navigate('/');
-                    } else {
-                      setError('Failed to sign in with Google');
-                    }
+                    const result = await signInWithPopup(auth, googleProvider);
+                    const firebaseUser = result.user;
+                    
+                    const user = {
+                      id: firebaseUser.uid,
+                      email: firebaseUser.email || '',
+                      name: firebaseUser.displayName || '',
+                      role: 'user',
+                      photoURL: firebaseUser.photoURL || ''
+                    };
+                    
+                    dispatch(setUser(user));
+                    navigate('/');
                   } catch (err) {
                     setError('Failed to sign in with Google');
                     console.error(err);

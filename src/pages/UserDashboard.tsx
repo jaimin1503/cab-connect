@@ -13,12 +13,12 @@ import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import Card from "../components/common/Card";
 import Button from "../components/common/Button";
-import { useAuth } from "../context/AuthContext";
+import { useAppSelector } from '../store/hooks';
 import { mockRides } from "../data/mockData";
 import { Ride } from "../types";
 
 const UserDashboard: React.FC = () => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAppSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState<"upcoming" | "history">(
     "upcoming"
   );
