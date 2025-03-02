@@ -58,6 +58,26 @@ const Home: React.FC = () => {
   return (
     <div className="flex-grow">
       <main>
+        {/* Quick Demo Links */}
+        <section className="bg-white dark:bg-gray-800 py-4 shadow-md">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link to="/user/dashboard" className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-100 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors">
+                User Dashboard
+              </Link>
+              <Link to="/driver/dashboard" className="px-4 py-2 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-100 rounded-md hover:bg-green-200 dark:hover:bg-green-800 transition-colors">
+                Driver Dashboard
+              </Link>
+              <Link to="/admin/dashboard" className="px-4 py-2 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-100 rounded-md hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors">
+                Admin Dashboard
+              </Link>
+              <Link to="/book" className="px-4 py-2 bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-100 rounded-md hover:bg-orange-200 dark:hover:bg-orange-800 transition-colors">
+                Book a Ride
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white">
           <div className="absolute inset-0 overflow-hidden">
@@ -222,7 +242,7 @@ const Home: React.FC = () => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white/10"
+                  className="border-white text-white hover:!bg-white/10"
                 >
                   Become a Driver
                 </Button>

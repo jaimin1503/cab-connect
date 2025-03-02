@@ -104,14 +104,13 @@ function App() {
               />
 
               {/* Protected Routes */}
+              {/* Demo Routes - Protected routes disabled */}
               <Route
                 path="/book"
                 element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <BookRide />
-                    </Layout>
-                  </ProtectedRoute>
+                  <Layout>
+                    <BookRide />
+                  </Layout>
                 }
               />
 
@@ -119,21 +118,17 @@ function App() {
               <Route
                 path="/user/dashboard"
                 element={
-                  <RoleProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <UserDashboard />
-                    </Layout>
-                  </RoleProtectedRoute>
+                  <Layout>
+                    <UserDashboard />
+                  </Layout>
                 }
               />
               <Route
                 path="/rides/:id"
                 element={
-                  <RoleProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <RideDetails />
-                    </Layout>
-                  </RoleProtectedRoute>
+                  <Layout>
+                    <RideDetails />
+                  </Layout>
                 }
               />
 
@@ -141,11 +136,9 @@ function App() {
               <Route
                 path="/driver/dashboard"
                 element={
-                  <RoleProtectedRoute allowedRoles={["driver"]}>
-                    <Layout>
-                      <DriverDashboard />
-                    </Layout>
-                  </RoleProtectedRoute>
+                  <Layout>
+                    <DriverDashboard />
+                  </Layout>
                 }
               />
 
@@ -153,11 +146,9 @@ function App() {
               <Route
                 path="/admin/dashboard"
                 element={
-                  // <RoleProtectedRoute allowedRoles={["admin"]}>
                   <Layout>
                     <AdminDashboard />
                   </Layout>
-                  // </RoleProtectedRoute>
                 }
               />
 
